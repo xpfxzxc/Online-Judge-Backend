@@ -13,8 +13,7 @@ _The project has not been completed and development has been abandoned, and it m
 - RabbitMQ
 - Hasura
 - PostgreSQL
-- Docker（
-  If you run Hasura locally）
+- Docker(if you run Hasura locally)
 
 ## Installation
 
