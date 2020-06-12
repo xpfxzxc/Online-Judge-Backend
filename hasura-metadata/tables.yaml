@@ -1,0 +1,382 @@
+- table:
+    schema: public
+    name: code
+  select_permissions:
+  - role: administrator
+    permission:
+      columns:
+      - id
+      - lang
+      - content
+      filter: {}
+      allow_aggregations: true
+  - role: guest
+    permission:
+      columns:
+      - content
+      - id
+      - lang
+      filter: {}
+      limit: 15
+      allow_aggregations: true
+  - role: user
+    permission:
+      columns:
+      - content
+      - id
+      - lang
+      filter: {}
+      limit: 15
+      allow_aggregations: true
+- table:
+    schema: public
+    name: problem
+  object_relationships:
+  - name: author
+    using:
+      foreign_key_constraint_on: author_id
+  array_relationships:
+  - name: problem_tags
+    using:
+      foreign_key_constraint_on:
+        column: problem_id
+        table:
+          schema: public
+          name: problem_tag
+  - name: submissions
+    using:
+      foreign_key_constraint_on:
+        column: problem_id
+        table:
+          schema: public
+          name: submission
+  - name: tags
+    using:
+      manual_configuration:
+        remote_table:
+          schema: public
+          name: problem_tags_view
+        column_mapping:
+          id: problem_id
+  insert_permissions:
+  - role: administrator
+    permission:
+      check: {}
+      set:
+        author_id: x-hasura-User-Id
+      columns:
+      - author_id
+      - background
+      - description
+      - difficulty
+      - input_format
+      - note
+      - output_format
+      - samples
+      - status
+      - title
+  select_permissions:
+  - role: administrator
+    permission:
+      columns:
+      - accepted_count
+      - author_id
+      - background
+      - created_at
+      - description
+      - difficulty
+      - id
+      - input_format
+      - memory_limit
+      - negative_count
+      - note
+      - output_format
+      - positive_count
+      - samples
+      - status
+      - submission_count
+      - time_limit
+      - title
+      - updated_at
+      filter: {}
+      allow_aggregations: true
+  - role: guest
+    permission:
+      columns:
+      - accepted_count
+      - author_id
+      - difficulty
+      - id
+      - memory_limit
+      - negative_count
+      - positive_count
+      - submission_count
+      - time_limit
+      - background
+      - description
+      - input_format
+      - note
+      - output_format
+      - samples
+      - created_at
+      - updated_at
+      - status
+      - title
+      filter: {}
+      limit: 15
+      allow_aggregations: true
+  - role: user
+    permission:
+      columns:
+      - accepted_count
+      - author_id
+      - background
+      - created_at
+      - description
+      - difficulty
+      - id
+      - input_format
+      - memory_limit
+      - negative_count
+      - note
+      - output_format
+      - positive_count
+      - samples
+      - status
+      - submission_count
+      - time_limit
+      - title
+      - updated_at
+      filter: {}
+      limit: 15
+      allow_aggregations: true
+  update_permissions:
+  - role: administrator
+    permission:
+      columns:
+      - background
+      - description
+      - difficulty
+      - id
+      - input_format
+      - note
+      - output_format
+      - samples
+      - status
+      - title
+      - updated_at
+      filter: {}
+  delete_permissions:
+  - role: administrator
+    permission:
+      filter: {}
+- table:
+    schema: public
+    name: problem_tag
+  object_relationships:
+  - name: tag
+    using:
+      foreign_key_constraint_on: tag_id
+  insert_permissions:
+  - role: administrator
+    permission:
+      check: {}
+      columns:
+      - problem_id
+      - tag_id
+  select_permissions:
+  - role: administrator
+    permission:
+      columns:
+      - problem_id
+      - tag_id
+      filter: {}
+  - role: guest
+    permission:
+      columns:
+      - problem_id
+      - tag_id
+      filter: {}
+  - role: user
+    permission:
+      columns:
+      - problem_id
+      - tag_id
+      filter: {}
+  update_permissions:
+  - role: administrator
+    permission:
+      columns:
+      - problem_id
+      - tag_id
+      filter: {}
+  delete_permissions:
+  - role: administrator
+    permission:
+      filter: {}
+- table:
+    schema: public
+    name: problem_tags_view
+  select_permissions:
+  - role: administrator
+    permission:
+      columns:
+      - problem_id
+      - id
+      - name
+      filter: {}
+  - role: guest
+    permission:
+      columns:
+      - id
+      - problem_id
+      - name
+      filter: {}
+  - role: user
+    permission:
+      columns:
+      - id
+      - problem_id
+      - name
+      filter: {}
+- table:
+    schema: public
+    name: submission
+  object_relationships:
+  - name: code
+    using:
+      foreign_key_constraint_on: code_id
+  - name: problem
+    using:
+      foreign_key_constraint_on: problem_id
+  - name: user
+    using:
+      foreign_key_constraint_on: user_id
+  select_permissions:
+  - role: administrator
+    permission:
+      columns:
+      - id
+      - status
+      - score
+      - time_usage
+      - memory_usage
+      - test_points
+      - created_at
+      - user_id
+      - code_id
+      - problem_id
+      filter: {}
+      allow_aggregations: true
+  - role: guest
+    permission:
+      columns:
+      - score
+      - memory_usage
+      - problem_id
+      - time_usage
+      - user_id
+      - test_points
+      - created_at
+      - code_id
+      - id
+      - status
+      filter: {}
+      limit: 15
+      allow_aggregations: true
+  - role: user
+    permission:
+      columns:
+      - score
+      - memory_usage
+      - problem_id
+      - time_usage
+      - user_id
+      - test_points
+      - created_at
+      - code_id
+      - id
+      - status
+      filter: {}
+      limit: 15
+      allow_aggregations: true
+- table:
+    schema: public
+    name: tag
+  insert_permissions:
+  - role: administrator
+    permission:
+      check: {}
+      columns:
+      - name
+  select_permissions:
+  - role: administrator
+    permission:
+      columns:
+      - id
+      - name
+      filter: {}
+  - role: guest
+    permission:
+      columns:
+      - id
+      - name
+      filter: {}
+  - role: user
+    permission:
+      columns:
+      - id
+      - name
+      filter: {}
+  update_permissions:
+  - role: administrator
+    permission:
+      columns:
+      - name
+      filter: {}
+  delete_permissions:
+  - role: administrator
+    permission:
+      filter: {}
+- table:
+    schema: public
+    name: tag_problems_view
+- table:
+    schema: public
+    name: user
+  array_relationships:
+  - name: problems
+    using:
+      foreign_key_constraint_on:
+        column: author_id
+        table:
+          schema: public
+          name: problem
+  select_permissions:
+  - role: administrator
+    permission:
+      columns:
+      - created_at
+      - email
+      - id
+      - name
+      - role
+      filter: {}
+  - role: guest
+    permission:
+      columns:
+      - created_at
+      - email
+      - id
+      - name
+      - role
+      filter: {}
+  - role: user
+    permission:
+      columns:
+      - created_at
+      - email
+      - id
+      - name
+      - role
+      filter: {}
